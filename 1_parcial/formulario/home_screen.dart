@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingPage extends StatefulWidget {
-  LandingPage({super.key, required this.userName, required this.userLast, 
+ LandingPage({super.key, required this.userName, required this.userLast, 
   required this.userPlast, required this.userPhone, required this.userEmail, 
   required this.userAge});
 
@@ -11,13 +11,24 @@ class LandingPage extends StatefulWidget {
   final String userPlast;
   final String userPhone;
   final String userEmail;
-  final String userAge;
+  final String userAge;  
+  // final formKey = GlobalKey<FormState>();
+  
 
   @override
   State<LandingPage> createState() => _LandingPageState();
 }
 
 class _LandingPageState extends State<LandingPage> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  clearData() async{
+    final SharedPreferences prefs = await _prefs;
+    // prefs.clear();
+    prefs.remove("email");
+  }
+
+  
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +55,9 @@ class _LandingPageState extends State<LandingPage> {
             )),
           const SizedBox(
             height: 50,
-          ),
+          ), 
+
+          //muestra los datos ingresados en el formulario
           Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -65,8 +78,9 @@ class _LandingPageState extends State<LandingPage> {
           Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-              onPressed: () {
+              onPressed: () { // regresar pantalla y limpiar datos 
                 Navigator.pop(context);
+                clearData();
               },
               child: const Text("Logout"),
           )),
